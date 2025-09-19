@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreKategoriRequest;
 use App\Http\Requests\UpdateKategoriRequest;
 
@@ -13,54 +14,85 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        $kategori = Kategori::all();
+        return response()->json($kategori, 200);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Simpan kategori baru
      */
-    public function create()
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $kategori = Kategori::create([
+            'nama_kategori' => $request->nama_kategori,
+            'keterangan'    => $request->keterangan,
+        ]);
+
+        return response()->json([
+            'message' => 'Kategori berhasil ditambahkan',
+            'data'    => $kategori,
+        ], 201);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Tampilkan kategori berdasarkan ID
      */
-    public function store(StoreKategoriRequest $request)
+    public function show($id)
     {
-        //
+        $kategori = Kategori::find($id);
+
+        if (!$kategori) {
+            return response()->json(['message' => 'Kategori tidak ditemukan'], 404);
+        }
+
+        return response()->json($kategori, 200);
     }
 
     /**
-     * Display the specified resource.
+     * Update kategori
      */
-    public function show(Kategori $kategori)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'keterangan'    => 'nullable|string',
+        ]);
+
+        $kategori = Kategori::find($id);
+
+        if (!$kategori) {
+            return response()->json(['message' => 'Kategori tidak ditemukan'], 404);
+        }
+
+        $kategori->update([
+            'nama_kategori' => $request->nama_kategori,
+            'keterangan'    => $request->keterangan,
+        ]);
+
+        return response()->json([
+            'message' => 'Kategori berhasil diperbarui',
+            'data'    => $kategori,
+        ], 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Hapus kategori
      */
-    public function edit(Kategori $kategori)
+    public function destroy($id)
     {
-        //
-    }
+        $kategori = Kategori::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateKategoriRequest $request, Kategori $kategori)
-    {
-        //
-    }
+        if (!$kategori) {
+            return response()->json(['message' => 'Kategori tidak ditemukan'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Kategori $kategori)
-    {
-        //
+        $kategori->delete();
+
+        return response()->json(['message' => 'Kategori berhasil dihapus'], 200);
     }
 }
