@@ -20,7 +20,7 @@ Ikuti langkah-langkah berikut untuk menjalankan aplikasi ArsipPemerintah di ling
 
 1.  **Kloning Repositori**: Buka terminal atau Command Prompt dan jalankan perintah berikut untuk mengkloning repositori ini ke komputer Anda.
     ```bash
-    git clone [https://github.com/namarepoanda/arsippemerintah.git](https://github.com/namarepoanda/arsippemerintah.git)
+    git clone https://github.com/ridhoduta/arsip-pemerintah.git
     cd arsippemerintah
     ```
 
